@@ -8,6 +8,7 @@ const publicPath = path.join(__dirname, "../public");
 
 //this function is literally equals to app.listen(); 
 let server = http.createServer(app);
+
 //In this function call we passed "server" i.e server that we wanna use in our web socket
 //And what we get back is a web socket server and on here we can do anything in terms of emitting or listening to events.This is
 //we gonna communicate between client and the server.
@@ -21,12 +22,17 @@ io.on("connection", (socket) => { //It lets you register an event listener where
     });
     socket.on("createMessage",(message)=>{
         console.log("There is a new message : ",message);
+        io.emit("newMessage",{   /*socket.emit() emits an event to a single connnection only whereas io.emit() emits an event to every single connection*/
+            from:message.from,
+            text:message.text,
+            createdAt:new Date().getDate()
+        });
     });
-    socket.emit("newMessage",{
-        from:"shivanshu@gmail.com",
-        text:"Meri gaand maaro",
-        createdAt:32213512
-    })
+    // socket.emit("newMessage",{
+    //     from:"shivanshu@gmail.com",
+    //     text:"Meri gaand maaro",
+    //     createdAt:32213512
+    // })
 })
 app.use(express.static(publicPath));
 
