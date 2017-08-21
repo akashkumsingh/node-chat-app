@@ -1,7 +1,7 @@
 const express = require("express");
 const http = require("http"); //To add socket support in our we need to configure our server using http.
 const socketIO = require("socket.io");
-const {generateMessage} = require("./utils/message.js");
+const {generateMessage,generateLocationMessage} = require("./utils/message.js");
 const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,7 +25,7 @@ io.on("connection", (socket) => { //It lets you register an event listener where
     });
     socket.on("createMessage", (message,callback) => {
         console.log("There is a new message : ", message);
-        io.emit("newMessage", generateMessage(message.from, message.text)); /*socket.emit() emits an event to a single connnection only whereas io.emit() emits an event to every single connection*/
+        io.emit("newMessage",generateMessage(message.from, message.text)); /*socket.emit() emits an event to a single connnection only whereas io.emit() emits an event to every single connection*/
         callback("Thanx!");
         // socket.broadcast.emit("newMessage",{/*socket.broadcast() emits an event to everyone but the user who emits it.*/
         //     from:message.from,
@@ -33,9 +33,11 @@ io.on("connection", (socket) => { //It lets you register an event listener where
         //     createdAt:new Date().getDate()
         // })
     });
-
-
+socket.on("locationMessage",(coords)=>{
+    io.emit("newLocationMessage",generateLocationMessage("Admin",coords.longi,coords.lati));
 })
+
+});
 app.use(express.static(publicPath));
 
 server.listen(port, () => {
