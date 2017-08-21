@@ -23,19 +23,19 @@ io.on("connection", (socket) => { //It lets you register an event listener where
     socket.on("disconnect", () => {
         console.log("User Disconnected Successfully.");
     });
-    socket.on("createMessage", (message,callback) => {
+    socket.on("createMessage", (message, callback) => {
         console.log("There is a new message : ", message);
-        io.emit("newMessage",generateMessage(message.from, message.text)); /*socket.emit() emits an event to a single connnection only whereas io.emit() emits an event to every single connection*/
-        callback("Thanx!");
+        io.emit("newMessage", generateMessage(message.from, message.text)); /*socket.emit() emits an event to a single connnection only whereas io.emit() emits an event to every single connection*/
+        callback();
         // socket.broadcast.emit("newMessage",{/*socket.broadcast() emits an event to everyone but the user who emits it.*/
         //     from:message.from,
         //     text:message.text,
         //     createdAt:new Date().getDate()
         // })
     });
-socket.on("locationMessage",(coords)=>{
-    io.emit("newLocationMessage",generateLocationMessage("Admin",coords.longi,coords.lati));
-})
+    socket.on("locationMessage", (coords) => {
+        io.emit("newLocationMessage", generateLocationMessage("Admin", coords.longi, coords.lati));
+    });
 
 });
 app.use(express.static(publicPath));
