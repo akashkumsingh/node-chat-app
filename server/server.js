@@ -1,7 +1,10 @@
 const express = require("express");
 const http = require("http"); //To add socket support in our we need to configure our server using http.
 const socketIO = require("socket.io");
-const {generateMessage,generateLocationMessage} = require("./utils/message.js");
+const {
+    generateMessage,
+    generateLocationMessage
+} = require("./utils/message.js");
 const path = require("path");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -40,6 +43,9 @@ io.on("connection", (socket) => { //It lets you register an event listener where
 });
 app.use(express.static(publicPath));
 
+app.get("/use", (req, res) => {
+    res.send("<h1>Hello</h1>")
+})
 server.listen(port, () => {
     console.log(`Server is running at port ${port}`);
 });

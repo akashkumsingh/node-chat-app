@@ -8,16 +8,17 @@
       console.log("User is Disconnected");
   });
   socket.on("newMessage", (newMessage) => {
-      console.log("New message", newMessage);
+      var currentTime=moment(newMessage.createdAt).format("h:mm a");
       var li = jQuery("<li></li>");
-      li.text(`${newMessage.from}:${newMessage.text}`);
+      li.text(`${newMessage.from} ${currentTime}: ${newMessage.text}`);
       jQuery("#msglist").append(li);
   });
 
   socket.on("newLocationMessage", function (msg) {
+    var currentTime=moment(msg.createdAt).format("h:mm a");
       var li = jQuery("<li></li>");
       var a = jQuery("<a target='_blank'>My current location</a>");
-      li.text(`${msg.from}:`);
+      li.text(`${msg.from} ${currentTime}:`);
       a.attr('href', msg.url);
       li.append(a);
       jQuery("#msglist").append(li);

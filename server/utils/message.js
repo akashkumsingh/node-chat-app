@@ -1,17 +1,15 @@
+const moment=require("moment");
 let generateMessage = (from, text) => {
     return {
         from,
         text,
-        createdAt: new Date().getTime()
+        createdAt: moment().valueOf()
     }
 }
 let generateLocationMessage=(from,longi,lati)=>{
 return {from,
 url:`http://google.com/maps/?q=${lati},${longi}`,
-createdAt:new Date().getTime()
+createdAt:moment().valueOf()
 }
 }
-module.exports = {
-    generateMessage,
-    generateLocationMessage
-}
+module.exports = {generateMessage,generateLocationMessage}
