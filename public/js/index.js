@@ -8,20 +8,25 @@
       console.log("User is Disconnected");
   });
   socket.on("newMessage", (newMessage) => {
-      var currentTime=moment(newMessage.createdAt).format("h:mm a");
-      var li = jQuery("<li></li>");
-      li.text(`${newMessage.from} ${currentTime}: ${newMessage.text}`);
-      jQuery("#msglist").append(li);
+    var currentTime=moment(newMessage.createdAt).format("h:mm a");
+      var template=$("#message-template").html();
+      var html=Mustache.render(template,{
+          text:newMessage.text,
+          from:newMessage.from,
+          createdAt:currentTime
+      });
+      jQuery("#msglist").append(html);
   });
 
   socket.on("newLocationMessage", function (msg) {
     var currentTime=moment(msg.createdAt).format("h:mm a");
-      var li = jQuery("<li></li>");
-      var a = jQuery("<a target='_blank'>My current location</a>");
-      li.text(`${msg.from} ${currentTime}:`);
-      a.attr('href', msg.url);
-      li.append(a);
-      jQuery("#msglist").append(li);
+    var locationTemplate=$("#location-message-template").html();
+      var html=Mustache.render(locationTemplate,{
+          from:msg.from,
+          url:msg.url,
+          createdAt:currentTime
+      });
+      jQuery("#msglist").append(html);
   });
 
   jQuery("#message-form").on("submit", function (e) {
